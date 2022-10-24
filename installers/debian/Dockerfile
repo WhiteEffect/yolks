@@ -32,4 +32,8 @@ ENV         DEBIAN_FRONTEND=noninteractive
 RUN         dpkg --add-architecture i386 \
 				&& apt update \
 				&& apt upgrade -y \
-				&& apt -y --no-install-recommends install ca-certificates curl lib32gcc-s1 libsdl2-2.0-0:i386 git unzip zip tar jq
+				&& apt -y --no-install-recommends install ca-certificates curl git unzip zip tar jq \
+				&& export ARCH=$([[ "$(uname -m)" == "x86_64" ]] && echo "x86_64" || echo "aarch64") \
+				&& if [ "$ARCH" == "x86_64" ]; then apt -y --no-install-recommends install lib32gcc-s1 libsdl2-2.0-0:i386 ; else echo "You are on arm64 this is not needed"; fi
+
+
